@@ -448,15 +448,113 @@ namespace PudelkoUnitTests
 
         #region Pole, Objêtoœæ ===================================
         // ToDo
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(1, 1, 1, 1)]
+        [DataRow(2.5, 5.33, 1.25, 16.65625)]
+        public void Objetosc_InMeter(double a, double b, double c, double expectedObjetosc)
+        {
+            var p = new Pudelko(a, b, c);
+            Assert.AreEqual(expectedObjetosc, p.Objetosc);
+
+        }
+
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(10, 105, 378, 0.3969)]
+        [DataRow(1.5, 20.8, 70.2, 0.00219024)]
+        [DataRow(5.5, 4.6, 9.1, 0.00023023)]
+        public void Objetosc_InCentimeter(double a, double b, double c, double expectedObjetosc)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.centimeter);
+            Assert.AreEqual(expectedObjetosc, p.Objetosc);
+
+        }
+
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(5, 2253, 72, 0.00081108)]
+        [DataRow(8251, 5254, 7259, 314.683123286)]
+        [DataRow(7252, 6255, 1528, 69.31200528)]
+        public void Objetosc_InMilimeter(double a, double b, double c, double expectedObjetosc)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.milimeter);
+            Assert.AreEqual(expectedObjetosc, p.Objetosc);
+
+        }
+
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(2, 2, 2, 24)]
+        [DataRow(4.1, 9.67, 3.543, 176.86822)]
+        public void Pole_InMeter(double a, double b, double c, double expectedObjetosc)
+        {
+            var p = new Pudelko(a, b, c);
+            Assert.AreEqual(expectedObjetosc, p.Pole);
+
+        }
+
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(200, 200, 200, 24)]
+        [DataRow(4.5, 39.8, 99.2, 0.914732)]
+        public void Pole_InCentimeter(double a, double b, double c, double expectedObjetosc)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.centimeter);
+            Assert.AreEqual(expectedObjetosc, p.Pole);
+
+        }
+
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(2000, 2000, 2000, 24)]
+        [DataRow(8251, 5254, 7259, 282.767098)]
+        public void Pole_InMilimeter(double a, double b, double c, double expectedObjetosc)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.milimeter);
+            Assert.AreEqual(expectedObjetosc, p.Pole);
+
+        }
 
         #endregion
 
         #region Equals ===========================================
         // ToDo
+        [TestMethod, TestCategory("Equals")]
+        [DataRow(1, 1, 1, UnitOfMeasure.meter, 100, 100, 100, UnitOfMeasure.centimeter, true)]
+        [DataRow(5, 3, 1, UnitOfMeasure.meter, 100, 200, 700, UnitOfMeasure.milimeter, false)]
+        [DataRow(32, 3, 76, UnitOfMeasure.centimeter, 2567, 57, 131, UnitOfMeasure.milimeter, false)]
+        [DataRow(5, 6, 3, UnitOfMeasure.meter, 6, 3, 5, UnitOfMeasure.meter, true)]
+        public void Equals(double a, double b, double c, UnitOfMeasure unit, double a2, double b2, double c2, UnitOfMeasure unit2, bool isEqual)
+        {
+            Pudelko p1 = new Pudelko(a, b, c, unit);
+            Pudelko p2 = new Pudelko(a2, b2, c2, unit2);
+
+            Assert.AreEqual(p1.Equals(p2), isEqual);
+        }
         #endregion
 
         #region Operators overloading ===========================
         // ToDo
+        [TestMethod, TestCategory("Operators")]
+        public void Operator_Same()
+        {
+            Pudelko p1 = new Pudelko();
+            Pudelko p2 = new Pudelko(100, 100, 100, UnitOfMeasure.milimeter);
+            Pudelko p3 = new Pudelko(9, 18, UnitOfMeasure.centimeter);
+            Assert.IsTrue(p1 == p2);
+            Assert.IsTrue(p2 != p3);
+        }
+
+
+        [TestMethod, TestCategory("Operators")]
+        [DataRow(1, 1, 1, 1, 1, 1, 2, 1, 1)]
+        [DataRow(3, 3, 2, 3, 2, 3, 4, 3, 3)]
+        [DataRow(2, 3, 8, 2, 5, 9, 4, 5, 9)]
+        [DataRow(2, 1, 7, 8, 3, 6, 4, 6, 8)]
+
+        public void Operator_Plus(double a1, double b1, double c1, double a2, double b2, double c2, double expectedA, double expectedB, double expectedC)
+        {
+            Pudelko p = new Pudelko(a1, b1, c1) + new Pudelko(a2, b2, c2);
+
+            Assert.AreEqual(p.A, expectedA);
+            Assert.AreEqual(p.B, expectedB);
+            Assert.AreEqual(p.C, expectedC);
+        }
         #endregion
 
         #region Conversions =====================================
@@ -472,7 +570,7 @@ namespace PudelkoUnitTests
         }
 
         [TestMethod]
-        public void ImplicitConversion_FromAalueTuple_As_Pudelko_InMilimeters()
+        public void ImplicitConversion_FromValueTuple_As_Pudelko_InMilimeters()
         {
             var (a, b, c) = (2500, 9321, 100); // in milimeters, ValueTuple
             Pudelko p = (a, b, c);
